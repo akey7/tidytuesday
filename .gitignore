@@ -3,7 +3,7 @@
 .Rapp.history
 
 # R project
-.Rproj
+*.Rproj
 
 # Session Data files
 .RData
@@ -39,3 +39,4 @@ tidytuesday_github.Rproj
 
 # macOS junk
 .DS_Store
+
