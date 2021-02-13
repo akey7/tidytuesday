@@ -131,3 +131,25 @@ collect_predictions(ikea_fit) %>%
   geom_point(alpha = 0.5, color = "midnightblue") +
   coord_fixed()
 ```
+
+```{r}
+what_could_be_saved <- ikea_fit$.workflow[[1]]
+predict(what_could_be_saved, ikea_test[150,])
+```
+
+## Find variable importance
+
+```{r}
+library(vip)
+imp_spec <- ranger_spec %>%
+  finalize_model(select_best(ranger_tune)) %>%
+  set_engine("ranger", importance = "permutation")
+
+workflow() %>%
+  add_recipe(ranger_recipe) %>%
+  add_model(imp_spec) %>%
+  fit(ikea_train) %>%
+  pull_workflow_fit() %>%
+  vip(aesthetics = list(alpha = 0.8, fill = "midnightblue"))
+```
+
