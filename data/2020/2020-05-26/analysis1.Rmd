@@ -1,0 +1,32 @@
+---
+title: "cocktails"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+## Load the data
+
+```{r}
+boston_cocktails <- read_csv("boston_cocktails.csv")
+ingredient_counts <- boston_cocktails %>%
+  count(ingredient, sort = TRUE)
+
+boston_cocktail_clean <- boston_cocktails %>%
+  mutate(ingredient = str_to_lower(ingredient),
+         ingredient = str_replace_all(ingredient, "-", " "),
+         ingredient = str_remove(ingredient, " liqueur| (if desired)"),
+         ingredient = case_when(str_detect(ingredient, "bitters") ~ "bitters",
+                                str_detect(ingredient, "oranage") ~ "orange juice",
+                                str_detect(ingredient, "lemon") ~ "lime juice",
+                                str_detect(ingredient, "grapefruit") ~ "grapefruit juice",
+                                str_detect(ingredient, "oranage") ~ "orange juice"),
+                                TRUE ~ ingredient)
+
+clean_ingredient_counts <- boston_cocktail_clean %>%
+  count(ingredient, sort = TRUE)
+```
